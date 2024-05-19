@@ -1,15 +1,15 @@
 package com.nelioalves.workshopmongo.resources;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nelioalves.workshopmongo.domain.User;
+import com.nelioalves.workshopmongo.services.UserService;
 
 /*
  * @RestController - annotation para informar para o spring que essa
@@ -21,18 +21,17 @@ import com.nelioalves.workshopmongo.domain.User;
 @RestController
 @RequestMapping(value = "/users")
 public class UserResource {
+	
+	@Autowired
+	private UserService userService;
    
 	/* @GetMapping - annotation para informar que esse método é um endpoint rest
 	 * no caminho "/users", que fornecerá informações para o cliente
 	 **/
 	@GetMapping
-	public ResponseEntity<List<User>> findAll(){
-		User maria = new User("1", "Maria Silva", "Maria@gmail.com");
-		User alex = new User("2", "Alex Duzentos", "alex@gmail.com");
-		
-		List<User> list = new ArrayList<>();
-		list.addAll(Arrays.asList(maria, alex));
-		
+	public ResponseEntity<List<User>> findAll() throws Exception{
+		List<User> list = userService.findAll();
+
 		/* O método ok instância o ResponseEntity já com o código 
 		 * de resposta http que a resposta ocorreu com sucesso
 		 * 

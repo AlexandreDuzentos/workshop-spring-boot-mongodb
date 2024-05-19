@@ -3,9 +3,20 @@ package com.nelioalves.workshopmongo.domain;
 import java.io.Serializable;
 import java.util.Objects;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+/* @Document - annotation usada para informar para o spring data
+ * que essa entidade corresponde a uma coleção do meu banco de dados mongodb.
+ * 
+ * collection = "user" serve para personalizar o nome da coleção, caso
+ * contrário o spring data utilizará o nome da entidade.
+ * */
+@Document(collection = "user")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@Id
 	private String id;
 	private String name;
 	private String email;
@@ -13,7 +24,6 @@ public class User implements Serializable {
 	public User() {}
 
 	public User(String id, String name, String email) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
