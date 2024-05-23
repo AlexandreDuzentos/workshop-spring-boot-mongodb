@@ -19,6 +19,9 @@ public class UserDTO implements Serializable {
 	/*
 	 * Construtor para instânciar o DTO a partir do objeto entity
 	 * correspondente(User)
+	 * 
+	 * O método construtor é o responsável por converter um objeto
+	 * do tipo user para um objeto do tipo UserDTO.
 	 * */
 	public UserDTO(User obj) {
 		id = obj.getId();
