@@ -54,5 +54,10 @@ public class UserService {
 				        objDto.getEmail());	
 	}
 	
-	
+	public void delete(String id) {
+		  findById(id);
+		  userRepository.deleteById(id); 
+		
+		
+	}
 }
