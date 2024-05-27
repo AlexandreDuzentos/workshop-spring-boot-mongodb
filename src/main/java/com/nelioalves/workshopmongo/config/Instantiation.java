@@ -44,7 +44,7 @@ public class Instantiation implements CommandLineRunner {
 		 *  Salvando novos registros na coleção user no MongoDB
 		 *  
 		 *  Os users estão sendo salvos antes da associação entre
-		 *  posts e os authors para que ele tenham um id próprio, que
+		 *  posts e os authors para que eles(users) tenham um id próprio, que
 		 *  é gerado pelo banco de dados e para que esse id seja copiado
 		 *  para o AuthorDTO, caso contrário o id do AuthorDTO seria null.
 		 *  
@@ -63,6 +63,11 @@ public class Instantiation implements CommandLineRunner {
 		 *  passados como argumento com os dados que foram salvos no
 		 *  banco de dados.
 		 *  
+		 *  O método saveAll salva os objetos no banco de dados e já busca
+		 *  os últimos registros salvos nas coleções correspondentes ao
+		 *  aos objetos salvos para popular para popular esses mesmos objetos
+		 *  na minha aplicação.
+		 *  
 		 *   */
 		userRepository.saveAll(Arrays.asList(maria, alex, bob));
 		
@@ -71,6 +76,13 @@ public class Instantiation implements CommandLineRunner {
 		
 		/* Salvando novos registros na coleção post no MongoDB */
 		postRepository.saveAll(Arrays.asList(post1, post2));
+		
+		/* Associando um user aos seus respectivos posts */
+		maria.getPosts().addAll(Arrays.asList(post1, post2));
+		
+		/* Salvando o user novamente já com os posts */
+		userRepository.saveAll(Arrays.asList(maria));
+		
 		
 		
 			

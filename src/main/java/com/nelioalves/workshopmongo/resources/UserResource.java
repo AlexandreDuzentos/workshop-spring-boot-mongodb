@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.nelioalves.workshopmongo.DTO.UserDTO;
+import com.nelioalves.workshopmongo.domain.Post;
 import com.nelioalves.workshopmongo.domain.User;
 import com.nelioalves.workshopmongo.services.UserService;
 
@@ -34,7 +35,10 @@ public class UserResource {
 	@Autowired
 	private UserService userService;
    
-	/* @GetMapping - annotation para informar que esse método é um endpoint rest
+	/* 
+	 *  Método responsável por recuperar todos os usuários do banco
+	 *  de dados.
+	 *  @GetMapping - annotation para informar que esse método é um endpoint rest
 	 * no caminho "/users", que fornecerá informações para o cliente
 	 **/
 	@GetMapping
@@ -52,7 +56,11 @@ public class UserResource {
 		return ResponseEntity.ok().body(listDto);
 	} 
 	
-	/* /{id} é um complemento do endpoint raíz */
+	/*
+	 *  /{id} é um complemento do endpoint raíz
+	 *  
+	 *  Método responsável por recuperar um User pelo id.
+	 *  */
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<UserDTO> findById(@PathVariable String id) {
 		User user = userService.findById(id);
@@ -60,6 +68,7 @@ public class UserResource {
 		return ResponseEntity.ok().body(new UserDTO(user));
 	}
 	
+	/* Método responsável por inserir um User no banco de dados */
 	@PostMapping
 	public ResponseEntity<Void> insert(@RequestBody UserDTO objDto) {
 		User user = userService.fromDTO(objDto);
@@ -68,12 +77,14 @@ public class UserResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
+	/* Método responsável por deletar um User */
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable String id){
 		userService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 	
+	/* Método responsável por atualizar um User */
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<Void> update(@RequestBody UserDTO objDto, @PathVariable String id) {
 		User user = userService.fromDTO(objDto);
@@ -81,6 +92,23 @@ public class UserResource {
 		user = userService.update(user);
 		
 		return ResponseEntity.noContent().build();
+	}
+	
+	/*
+	 *  /{id}/posts é um complemento do endpoint raíz
+	 *  
+	 *  Método responsável por obter os posts de um User
+	 * 
+	 */
+	@GetMapping(value = "/{id}/posts")
+	public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {
+		User user = userService.findById(id);
+		
+		/* Nesse caso, o método getPosts trará de fato os posts
+		 * e não as referências aos posts, as referências é apenas 
+		 * para o banco de dados.
+		 * */
+		return ResponseEntity.ok().body(user.getPosts());
 	}
 	
 	
