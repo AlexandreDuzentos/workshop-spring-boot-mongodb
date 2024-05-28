@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
 import com.nelioalves.workshopmongo.DTO.AuthorDTO;
+import com.nelioalves.workshopmongo.DTO.CommentDTO;
 import com.nelioalves.workshopmongo.domain.Post;
 import com.nelioalves.workshopmongo.domain.User;
 import com.nelioalves.workshopmongo.repository.PostRepository;
@@ -72,9 +73,20 @@ public class Instantiation implements CommandLineRunner {
 		userRepository.saveAll(Arrays.asList(maria, alex, bob));
 		
 		Post post1 = new Post(null, sdf.parse("21/03/2018"), "Partiu viagem", "Vou viajar para São Paulo. Abraços!", new AuthorDTO(maria));
-		Post post2 = new Post(null, sdf.parse("23/03/2018"), "Bom dia", "Acordei feliz hoje!", new AuthorDTO(maria));	
+		Post post2 = new Post(null, sdf.parse("23/03/2018"), "Bom dia", "Acordei feliz hoje!", new AuthorDTO(maria));
 		
-		/* Salvando novos registros na coleção post no MongoDB */
+		CommentDTO commentDto1 = new CommentDTO("Boa viagem mano", sdf.parse("21/03/2018"), new AuthorDTO(alex));
+		CommentDTO commentDto2 = new CommentDTO("Aproveite", sdf.parse("22/03/2018"), new AuthorDTO(bob));
+		CommentDTO commentDto3 = new CommentDTO("Tenha um ótimo dia", sdf.parse("23/03/2018"), new AuthorDTO(alex));
+		
+		/* Associando comentários a posts */
+		post1.getComments().addAll(Arrays.asList(commentDto1, commentDto2));
+		post2.getComments().add(commentDto3);
+		
+		/* 
+		 * Salvando novos registros na coleção post já associados
+		 * com o autor e os comentários no MongoDB.
+		 * */
 		postRepository.saveAll(Arrays.asList(post1, post2));
 		
 		/* Associando um user aos seus respectivos posts */
@@ -82,6 +94,8 @@ public class Instantiation implements CommandLineRunner {
 		
 		/* Salvando o user novamente já com os posts */
 		userRepository.saveAll(Arrays.asList(maria));
+		
+		
 		
 		
 		
