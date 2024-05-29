@@ -83,6 +83,7 @@ public class Instantiation implements CommandLineRunner {
 		post1.getComments().addAll(Arrays.asList(commentDto1, commentDto2));
 		post2.getComments().add(commentDto3);
 		
+		
 		/* 
 		 * Salvando novos registros na coleção post já associados
 		 * com o autor e os comentários no MongoDB.
