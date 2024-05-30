@@ -28,7 +28,15 @@ public class Instantiation implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		/* Setando o TimeZone do objeto sdf para GMT */
+		/* Setando o TimeZone do objeto sdf para GMT, a data será armazenada
+		 * no formato GMT, mas visualmente ela será apresentada como uma data
+		 * com um timezone da minha máquina, isso porque o mongoCompass utiliza
+		 * o timezone da máquina para exibir as datas, mas internamente a data
+		 * fica armazanada no formato GMT, então em caso de consulta pela
+		 * data oque vai contar é data armazenada internamente pelo mongoDB, que
+		 * corresponderá a data no formato GMT que é o formato na qual ela foi 
+		 * salva.
+		 *  */
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		
 		/* Limpando os dados da coleção user no MongoDB */

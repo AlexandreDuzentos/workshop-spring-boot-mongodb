@@ -1,5 +1,6 @@
 package com.nelioalves.workshopmongo.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -16,15 +17,19 @@ public interface PostRepository extends MongoRepository<Post, String> {
 	 * spring data oferece para ele gerar as consultas automaticamente
 	 * para nós.
 	 * 
-	 * O método abaixo é responsável por fazer uma busca pelo título
+	 * O método abaixo é responsável por fazer uma busca pelo title
 	 * de um post e a busca será insensível a maiúsculas e minúsculas,
 	 * esse método não pode possuir qualquer identificador pois ele não
 	 * é personalizado, o idenficador para ele ficará amarrado a nomenclaturas
-	 * usadas pelo spring data.
+	 * usadas pelo spring data para efetuar a consulta conforme o nosso interesse.
 	 * */
 	List<Post> findByTitleContainingIgnoreCase(String text);
 	
 	/* 
+	 * 
+	 * O método abaixo é responsável por fazer uma buscar posts
+	 * pelo title.
+	 * 
 	 * O Método agora pode receber qualquer identificador, pois a
 	 * consulta será personalizada, ela não está amarrado a nenhuma
 	 * nomenclatura do spring data.
@@ -41,5 +46,13 @@ public interface PostRepository extends MongoRepository<Post, String> {
 	 * */
 	@Query("{ 'title': { $regex: ?0, $options: 'i' } }")
 	List<Post> searchTitle(String text);
+	
+	/* 
+	 * Dentro da annotation foi passado uma expressão lógica usando o operador
+	 * lógico && para testar se a data do meu post está entre uma data
+	 * e outra.
+	 * */
+	@Query("{ $and: [ { date: {$gte: ?1} }, { date: { $lte: ?2} } , { $or: [ { 'title': { $regex: ?0, $options: 'i' } }, { 'body': { $regex: ?0, $options: 'i' } }, { 'comments.text': { $regex: ?0, $options: 'i' } } ] } ] }")
+	List<Post> fullSearch(String text, Date minDate, Date maxDate);
 	
 }
